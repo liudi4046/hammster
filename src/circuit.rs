@@ -219,7 +219,7 @@ mod test {
             Value::known(Fp::zero()),
         ];
         let circuit = HammsterCircuit { input_a, input_b };
-        let prover = MockProver::run(k, &circuit, vec![vec![Fp::from(7)]]).unwrap();
+        let prover = MockProver::run(k, &circuit, vec![vec![Fp::from(8)]]).unwrap();
         prover.assert_satisfied();
     }
 }

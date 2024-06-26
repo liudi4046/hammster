@@ -1,20 +1,16 @@
 use halo2_proofs::{
-    arithmetic::Field,
-    circuit::{AssignedCell, Chip, Layouter, Region, SimpleFloorPlanner, Value},
-    dev::MockProver,
+    circuit::Value,
     pasta::{EqAffine, Fp},
-    plonk::{
-        create_proof, keygen_pk, keygen_vk, verify_proof, Advice, Circuit, ConstraintSystem, Error,
-        Expression, Instance, ProvingKey, Selector, SingleVerifier, VerifyingKey,
-    },
-    poly::{commitment::Params, Rotation},
+    plonk::{create_proof, keygen_pk, keygen_vk, verify_proof, Error, SingleVerifier},
+    poly::commitment::Params,
     transcript::{Blake2bRead, Blake2bWrite, Challenge255},
 };
 use iced::widget::{Button, Column, TextInput};
 use iced::{Alignment, Element, Sandbox, Settings};
-mod circuit;
-use circuit::{empty_circuit, HammsterCircuit};
+
+use hammster2::circuit::{empty_circuit, HammsterCircuit};
 use rand_core::OsRng;
+use std::fs;
 
 pub fn main() -> iced::Result {
     Hammster::run(Settings::default())
@@ -71,10 +67,12 @@ impl Sandbox for Hammster {
 
                 let proof = generate_proof(&hamming_distance, input_a, input_b);
                 println!("proof generated");
-                match verify(&hamming_distance, proof) {
+                write_vec_to_file(proof, "proof").expect("create proof file should success");
+                let proof = fs::read("proof").unwrap();
+                match verify(&hamming_distance, &proof) {
                     Ok(_) => println!("verify success"),
                     Err(_) => println!("verify failed"),
-                }
+                };
             }
         }
     }
@@ -128,7 +126,7 @@ pub fn generate_proof(
     .expect("Prover should not fail");
     transcript.finalize()
 }
-pub fn verify(pub_input: &Vec<Fp>, proof: Vec<u8>) -> Result<(), Error> {
+pub fn verify(pub_input: &Vec<Fp>, proof: &Vec<u8>) -> Result<(), Error> {
     println!("Verifying proof...");
 
     let k = 5;
@@ -139,4 +137,8 @@ pub fn verify(pub_input: &Vec<Fp>, proof: Vec<u8>) -> Result<(), Error> {
     let vk = keygen_vk(&params, &circuit).unwrap();
 
     verify_proof(&params, &vk, strategy, &[&[pub_input]], &mut transcript)
+}
+fn write_vec_to_file(data: Vec<u8>, file_name: &str) -> Result<(), Error> {
+    fs::write(file_name, data)?;
+    Ok(())
 }
