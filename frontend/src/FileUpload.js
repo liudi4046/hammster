@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import * as hm from "./lib/wasm/hammster2.js"; // 确保正确的路径
+import * as hm from "./lib/wasm/hammster2.js";
 
 function FileUpload() {
   const [file, setFile] = useState(null);
@@ -9,7 +9,7 @@ function FileUpload() {
   useEffect(() => {
     async function loadWasm() {
       try {
-        await hm.default(); // 初始化 Wasm 模块
+        await hm.default();
         setWasmReady(true);
       } catch (error) {
         console.error("Error loading wasm module:", error);
@@ -41,7 +41,6 @@ function FileUpload() {
       const fileContent = new Uint8Array(event.target.result);
       console.log("File content:", fileContent);
 
-      // Assuming verify function exists and takes Uint8Array as input
       let public_input = new Uint32Array([hammingDistance]);
       console.log("now public input:", public_input);
 
