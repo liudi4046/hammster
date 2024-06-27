@@ -1,0 +1,14 @@
+{
+  "name": "hammster2",
+  "version": "0.1.0",
+  "files": [
+    "hammster2_bg.wasm",
+    "hammster2.js",
+    "hammster2.d.ts"
+  ],
+  "module": "hammster2.js",
+  "types": "hammster2.d.ts",
+  "sideEffects": [
+    "./snippets/*"
+  ]
+}
