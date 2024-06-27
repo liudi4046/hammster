@@ -20,3 +20,7 @@ wasm-bindgen = "0.2.84"
 js-sys = "0.3.61"
 iced = "0.12.1"
 iced_core = "0.12.3"
+
+[[bin]]
+name = "hammster2"
+path = "src/main.rs"

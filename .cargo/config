@@ -6,3 +6,12 @@ build-std = ["panic_abort", "std"]
 
 [build]
 target = "aarch64-apple-darwin"
+
+[source.crates-io]
+replace-with = 'mirror'
+
+[source.mirror]
+registry = " https://mirrors.tuna.tsinghua.edu.cn/git/crates.io-index.git"
+
+[target.x86_64-pc-windows-gnu]
+linker = "x86_64-w64-mingw32-gcc"
